@@ -884,6 +884,9 @@ an error will be thrown. Point is not preserved."
                            :date))
          (start (if stime stime sday))
          (end   (if etime etime eday))
+         (startsec (org-gcal--time-to-seconds (org-gcal--parse-date start)))
+         (endsec (org-gcal--time-to-seconds (org-gcal--parse-date end)))
+         (effort (format "%.1f" (/ (- endsec startsec) 3600.0)))
          (elem))
     (when loc (replace-regexp-in-string "\n" ", " loc))
     (org-edit-headline smry)
@@ -898,6 +901,7 @@ an error will be thrown. Point is not preserved."
                "Join Hangouts Meet")))
     (org-entry-put (point) org-gcal-calendar-id-property calendar-id)
     (org-gcal--put-id (point) calendar-id event-id)
+    (org-entry-put (point) "Effort" effort)
     ;; Insert event time and description in :ORG-GCAL: drawer, erasing the
     ;; current contents.
     (org-gcal--back-to-heading)
